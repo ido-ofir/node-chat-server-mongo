@@ -1,6 +1,6 @@
 
-var ChatServer = require('node-chat-server');
-// var ChatServer = require('../node-chat-server');
+// var ChatServer = require('node-chat-server');
+var ChatServer = require('../node-chat-server');
 var mongodb = require('mongodb');
 var async = require('async');
 
@@ -78,12 +78,18 @@ module.exports = function (options, callback) {
               // query.ids is an array with two ids in it.
               // the first id belongs to the user that is requesting the mesasges.ng
               // the second id can be a user id or a group id.
-              var findQuery = {
-                $or: [
-                  { from: query.ids[0], to: query.ids[1] },
-                  { from: query.ids[1], to: query.ids[0] }
-                ]
-              };
+              var findQuery;
+              if(query.isGroup){
+                findQuery = { to: query.ids[1]};
+              }
+              else{
+                findQuery = {
+                  $or: [
+                    { from: query.ids[0], to: query.ids[1] },
+                    { from: query.ids[1], to: query.ids[0] }
+                  ]
+                };
+              }
               var cursor = chats.find(findQuery);
 
               // sort by descending creation date. 'createdAt' is added by the chat server to every message.
