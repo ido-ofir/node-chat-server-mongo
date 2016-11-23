@@ -16,7 +16,7 @@ module.exports = function (options, callback) {
   mongodb.connect(options.url || 'mongodb://localhost:27017/chatserver', function(err, db) {
 
       if(err){
-        throw err;
+        callback(err);
       }
 
       // point to a collection holding all chat messages.
@@ -90,6 +90,11 @@ module.exports = function (options, callback) {
                   ]
                 };
               }
+
+              if(options.log){
+                console.log('getting messages - ')
+                console.log(findQuery)
+              }
               var cursor = chats.find(findQuery);
 
               // sort by descending creation date. 'createdAt' is added by the chat server to every message.
@@ -128,7 +133,7 @@ module.exports = function (options, callback) {
 
       // start the chat server.
       var chatServer = new ChatServer(serverOptions);
-      callback({
+      callback(null, {
         server: chatServer,
         mongo: db,
         chats: chats,
