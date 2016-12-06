@@ -1,6 +1,6 @@
 
-// var ChatServer = require('node-chat-server');
-var ChatServer = require('../node-chat-server');
+var ChatServer = require('node-chat-server');
+// var ChatServer = require('../node-chat-server');
 var mongodb = require('mongodb');
 var async = require('async');
 
@@ -51,12 +51,22 @@ module.exports = function (options, callback) {
         }
       }
 
+      var nodeChatServerMongo = {
+        db: db,
+        chats: chats,
+        groups: groups,
+        users: users,
+        ObjectId: mongodb.ObjectId
+      };
+
 
       var serverOptions = {
 
           port: options.port || 4001,   // the port that the chat server will listen on. defaults to 8080.
 
           log: ('log' in options ? options.log : true),    // log activities to the console. used for debugging purposes.
+
+          context: nodeChatServerMongo,
 
           authorize: options.authorize || function(data, callback){  // all connecting sockets will need to authorize before doing anything else.
                                       // the callback is expecting some kind of user object as the second argument.
@@ -124,6 +134,14 @@ module.exports = function (options, callback) {
               chats.findOneAndUpdate({ _id: mongodb.ObjectId(id) }, { $set: { read: true }}, {}, callback);
 
           },
+          //
+          // onOpen(){
+          //
+          //   if(options.onOpen){
+          //     options.onOpen.call(nodeChatServerMongo, nodeChatServerMongo);
+          //   }
+          //
+          // },
 
           actions: actions,
 
@@ -133,14 +151,8 @@ module.exports = function (options, callback) {
 
       // start the chat server.
       var chatServer = new ChatServer(serverOptions);
-      callback(null, {
-        server: chatServer,
-        mongo: db,
-        chats: chats,
-        groups: groups,
-        users: users,
-        ObjectId: mongodb.ObjectId
-      });
+      nodeChatServerMongo.server = chatServer;
+      callback(null, nodeChatServerMongo);
 
   });
 }
