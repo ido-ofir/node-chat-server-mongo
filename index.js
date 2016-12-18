@@ -1,6 +1,6 @@
 
-var ChatServer = require('node-chat-server');
-// var ChatServer = require('../node-chat-server');
+// var ChatServer = require('node-chat-server');
+var ChatServer = require('../node-chat-server');
 var mongodb = require('mongodb');
 var async = require('async');
 
@@ -15,6 +15,7 @@ module.exports = function (options, callback) {
   // first connect to the database.
   mongodb.connect(options.url || 'mongodb://localhost:27017/chatserver', function(err, db) {
 
+      console.log('here');
       if(err){
         callback(err);
       }
@@ -102,8 +103,7 @@ module.exports = function (options, callback) {
               }
 
               if(options.log){
-                console.log('getting messages - ')
-                console.log(findQuery)
+                console.log('getting messages - ', query.ids[0], '=>', query.ids[1])
               }
               var cursor = chats.find(findQuery);
 
@@ -117,7 +117,11 @@ module.exports = function (options, callback) {
               cursor.limit(query.limit);
 
               // execute
-              cursor.toArray(callback);
+              console.log('send');
+              cursor.toArray((err, t)=>{
+                console.log('back');
+                callback(err, t)
+              });
 
           },
 
