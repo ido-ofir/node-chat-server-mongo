@@ -1,12 +1,12 @@
 {
   "name": "node-chat-server-mongo",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "mongodb implementation for node-chat-server",
   "main": "index.js",
   "dependencies": {
     "async": "^2.0.1",
     "mongodb": "^2.2.10",
-    "node-chat-server": "^1.0.7"
+    "node-chat-server": "^1.0.9"
   },
   "devDependencies": {},
   "repository": "https://github.com/ido-ofir/node-chat-server-mongo.git",
