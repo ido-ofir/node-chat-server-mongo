@@ -1,6 +1,6 @@
 {
   "name": "node-chat-server-mongo",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "mongodb implementation for node-chat-server",
   "main": "index.js",
   "dependencies": {
