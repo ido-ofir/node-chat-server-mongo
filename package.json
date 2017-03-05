@@ -6,7 +6,7 @@
   "dependencies": {
     "async": "^2.0.1",
     "mongodb": "^2.2.10",
-    "node-chat-server": "^1.0.9"
+    "node-chat-server": "^1.1.0"
   },
   "devDependencies": {},
   "repository": "https://github.com/ido-ofir/node-chat-server-mongo.git",

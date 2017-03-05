@@ -7,7 +7,7 @@ var async = require('async');
 /*
  options:
   url - mongo url.
-
+  onError - error handler.
 */
 
 module.exports = function (options, callback) {
@@ -152,6 +152,11 @@ module.exports = function (options, callback) {
 
       // start the chat server.
       var chatServer = new ChatServer(serverOptions);
+      chatServer.on('error', function(err){ 
+        if(options.onError){
+          options.onError(err);
+        }
+      });
       nodeChatServerMongo.server = chatServer;
       callback(null, nodeChatServerMongo);
 
